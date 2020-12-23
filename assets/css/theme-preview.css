@@ -1,0 +1,198 @@
+/*------------------------------------
+Theme Preview
+------------------------------------*/
+.theme-preview {
+    overflow: hidden;
+    position: relative;
+    color: var(--base-0);
+    background-color: var(--base-1);
+}
+.theme-preview p {
+    font-size: 12px;
+}
+/* 
+Card
+*/
+.theme-preview .theme-preview-card {
+    margin-bottom: 30px;
+}
+/* 
+heading
+*/
+.theme-preview .theme-preview-heading {
+    text-align: center;
+    margin-bottom: 90px;
+}
+.theme-preview .theme-preview-heading h2 {
+    font-weight: 300;
+    margin-bottom: 15px;
+}
+.theme-preview .theme-preview-heading h3 {
+    margin-bottom: 0;
+}
+/*------------------------------------
+Theme Preview - Header
+------------------------------------*/
+.theme-preview .theme-preview-header {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    z-index: 999;
+    position: fixed;
+    background: linear-gradient(180deg, var(--base-0) 0%, transparent 100%);
+}
+.theme-preview .theme-preview-header .button {
+    float: right;
+    margin-top: 23px;
+}
+.theme-preview .theme-preview-header .theme-preview-logo {
+    float: left;
+    color: var(--base-1);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 90px;
+}
+/*------------------------------------
+Theme Preview - Footer
+------------------------------------*/
+.theme-preview .theme-preview-footer {
+    color: var(--base-1);
+    text-align: center;
+    padding: 45px 0;
+    background-color: var(--primary);
+}
+.theme-preview .theme-preview-footer p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+.theme-preview .theme-preview-footer ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.theme-preview .theme-preview-footer ul li {
+    display: inline-block;
+    margin: 0 3px;
+}
+.theme-preview .theme-preview-footer ul li a {
+    display: block;
+}
+.theme-preview .theme-preview-footer ul li a:hover {
+    color: var(--primary);
+}
+/*------------------------------------
+Theme Preview - Call Action
+------------------------------------*/
+.theme-preview .theme-preview-ca {
+    height: 500px;
+    color: var(--base-1);
+    text-align: center;
+    background: var(--primary) fixed no-repeat center center / cover;
+}
+.theme-preview .theme-preview-ca h4 {
+    color: var(--primary);
+    font-size: 50px;
+    margin-bottom: 30px;
+}
+.theme-preview .theme-preview-ca .bg-color {
+    opacity: .75;
+}
+/*------------------------------------
+Theme Preview - Hero
+------------------------------------*/
+.theme-preview .theme-preview-hero {
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+}
+.theme-preview .theme-preview-hero p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 100;
+}
+.theme-preview .theme-preview-hero h1,
+.theme-preview .theme-preview-hero h2,
+.theme-preview .theme-preview-hero h3 {
+    color: var(--base-1);
+    margin-bottom: 30px;
+}
+.theme-preview .theme-preview-hero h1 {
+    line-height: 1;
+    font-size: 300px;
+    font-weight: 500;
+    margin-bottom: 0;
+    padding-top: 45px;
+    color: var(--primary)
+}
+.theme-preview .theme-preview-hero h2 {
+    font-size: 60px;
+    font-weight: 100;
+    letter-spacing: -3px;
+    line-height: 1.1;
+}
+.theme-preview .theme-preview-hero img {
+    position: absolute;
+}
+.theme-preview .theme-preview-hero .bg-color {
+    opacity: .75;
+}
+.theme-preview .theme-preview-hero .bg-image {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    animation: zoom 30s infinite;
+    background-attachment: fixed;
+}
+@media (max-width: 992px) {
+    .theme-preview .theme-preview-hero h1 {
+        font-size: 200px;
+    }
+}
+@media (max-width: 768px) {
+    .theme-preview .theme-preview-hero h1 {
+        font-size: 150px;
+    }
+}
+/*------------------------------------
+Theme Preview - Demos
+------------------------------------*/
+.theme-preview .theme-preview-demos {
+    position: relative;
+}
+.theme-preview .theme-preview-demos .item {
+    text-align: center;
+    transition: all 300ms;
+    margin-bottom: 45px;
+}
+.theme-preview .theme-preview-demos .item h4 {
+    padding: 30px 0 0;
+}
+.theme-preview .theme-preview-demos .item:not(.no-hover):hover {
+    color: var(--primary);
+    transform: translate(0, -3px);
+}
+.theme-preview-avatar {
+    top: -50px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+}
+/*------------------------------------
+Theme Preview - Features
+------------------------------------*/
+.theme-preview .theme-preview-features .item {
+    text-align: center;
+    padding: 30px 20px 20px;
+    margin-bottom: 30px;
+    border: 1px solid #eee;
+}
+.theme-preview .theme-preview-features .item p {
+    opacity: .75;
+    color: var(--base-0);
+}
