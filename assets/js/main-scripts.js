@@ -56,10 +56,11 @@
     /*====== PagePiling ======*/
     NUXT.PageScrollEffect = function () {
         var pagepiling = $("#site-wrapper");
-        //var menu_horizontal;
+        var menu_horizontal;
         pagepiling.pagepiling({
             menu: ".site-header .header-nav, .site-sidenav .sidenav-nav",
-            anchors: ["intro", "blog", "services",  "about",  "contact"],
+          //  anchors: ["intro", "blog", "services",  "about",  "contact"],
+             anchors: ["inicio", "porfolio", "tecnologias",  "blogCV",  "contacto"],
             direction: "horizontal",
             css3: false,
             navigation: true,
@@ -67,14 +68,19 @@
             sectionSelector: ".section",
             animateAnchor: true,
             afterRender: function () {
+
             },
             onLeave: function (index, nextIndex, direction) {
                 $('.section').eq(index - 1).find('h1, p').fadeOut(700, 'easeInQuart');
                 $('.section').eq(nextIndex - 1).find('h1, p').fadeIn(700, 'easeInQuart');
-                // menu_horizontal = $(".active").text('').attr('data-menuanchor');
-               // $('#principal_title').text($(".active").text('').attr('data-menuanchor'));
-                
-            }
+            },
+             afterLoad: function(anchorLink, index){ // the last rafa colaboration 2020.
+                menu_horizontal = $(".active").attr('data-menuanchor');
+                //console.log(menu_horizontal);
+                $('#principal_title').text(menu_horizontal);
+            },
+
+           
         });
         $.fn.pagepiling.setAllowScrolling(true);
         // Disable Keyboard Scrolling
