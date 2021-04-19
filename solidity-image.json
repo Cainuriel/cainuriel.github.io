@@ -1,11 +1,11 @@
 {
-"name": "Botón de Nácar",
-"description": "Insignia ganada en la zona Premium de Daniel Primo",
-"image": "https://cainuriel.github.io/assets/images/ERC721/boton-nacar.png",
+"name": "Solidity Image",
+"description": "Insignia Solidity para pruebas",
+"image": "https://cainuriel.github.io/assets/images/tecno/solidity.png",
 "attributes": [
 {
 "trait_type": "scarcity",
-"value": "Rare"
+"value": "Unique"
 },
 {
 "trait_type": "season",
@@ -18,7 +18,7 @@
 {
 "trait_type": "serial_number",
 "value": 1,
-"max_value": 100,
+"max_value": 1,
 "display_type": "number"
 }
 ]
