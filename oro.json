@@ -1,0 +1,25 @@
+{
+"name": "Medalla de oro",
+"description": "Insignia para los feladores",
+"image": "https://cainuriel.github.io/assets/images/ERC721/medallafelador-2021.png",
+"attributes": [
+{
+"trait_type": "scarcity",
+"value": "So Rare"
+},
+{
+"trait_type": "season",
+"value": "2021"
+},
+{
+"trait_type": "badge-type",
+"value": "Award"
+},
+{
+"trait_type": "serial_number",
+"value": 1,
+"max_value": 4,
+"display_type": "number"
+}
+]
+}
