@@ -17,7 +17,7 @@
 },
 {
 "trait_type": "serial_number",
-"value": 1,
+"value": 2,
 "max_value": 4,
 "display_type": "number"
 }
