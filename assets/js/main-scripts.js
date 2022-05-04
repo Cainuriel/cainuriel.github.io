@@ -60,7 +60,7 @@
         pagepiling.pagepiling({
             menu: ".site-header .header-nav, .site-sidenav .sidenav-nav",
           //  anchors: ["intro", "blog", "services",  "about",  "contact"],
-             anchors: ["inicio", "porfolio", "tecnologias",  "blogCV", "blockchain",  "contacto"],
+             anchors: ["inicio", "dapps", "tecnologias",   "blockchains", "about", "contacto"],
             direction: "vertical",
             css3: false,
             navigation: true,
