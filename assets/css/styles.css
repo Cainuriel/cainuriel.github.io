@@ -778,8 +778,8 @@ Buttons
 }
 
 .button-light {
-    color: var(--primary);
-    background-color: #fff;
+    color:#fff;
+    background-color: rgba(255, 255, 255, 0.267);
 }
 
 .button-light:hover {
