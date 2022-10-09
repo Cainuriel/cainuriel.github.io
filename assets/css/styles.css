@@ -683,6 +683,17 @@ Forms
 .form-1 ::placeholder {
     color: var(--base-1);
 }
+
+/*------------------------------------
+Video
+------------------------------------*/
+
+    .video {
+        height: 100vh;
+        width: 100%;
+        object-fit: cover;
+    }
+    
 /*------------------------------------
 Buttons
 ------------------------------------*/
@@ -1691,9 +1702,10 @@ Hero
         width: 70%;
     }
 }
-@media (max-width: 992px) {
+/* @media (max-width: 992px) {
     .section-hero-1 .site-sidebar {
         width: 36%;
+        background-color: transparent;
     }
     .section-hero-1 .hero-content {
         width: 64%;
@@ -1702,12 +1714,13 @@ Hero
 @media (max-width: 870px) {
     .section-hero-1 .site-sidebar {
         width: 40%;
+        background-color: transparent;
     }
     .section-hero-1 .hero-content {
         width: 60%;
     }
-}
-@media (max-width: 768px) {
+} */
+@media (max-width: 1200px) {
     .section-hero-1 .site-sidebar {
         right: 0;
         width: 50%;
@@ -1719,6 +1732,7 @@ Hero
     }
     .section-hero-1 .display-center {
         max-width: 340px !important;
+
     }
     .section-hero-1 .hero-content {
         width: 100%;
@@ -1735,6 +1749,8 @@ Hero
         background-color: transparent;
     }
 }
+
+
 /*------------------------------------
 About
 ------------------------------------*/
