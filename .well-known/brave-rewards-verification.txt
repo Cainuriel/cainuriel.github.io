@@ -1,4 +1,4 @@
-This is a Brave Rewards publisher verification file.
+This is a Brave Creators publisher verification file.
 
 Domain: cainuriel.github.io
 Token: 9e0e2a1ee4cbf84b32dc67e43011fbe92aa9075b702f3e2e070ed297ef680c4a
