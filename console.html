@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cainuriel - Console</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <!-- Audio element for visualizer -->
+    <audio id="bgm-audio" src="assets/bgm/cainuriel.mp3" loop crossorigin="anonymous"></audio>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0C120C;
+            color: #00FF3C;
+            font-family: 'Orbitron', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Oscilloscope Canvas - Background */
+        #oscilloscope {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+            background: #000000;
+        }
+
+        #oscilloscope.active {
+            opacity: 0.4;
+        }
+
+        /* Mobile Welcome Modal */
+        #mobile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        #mobile-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0C120C;
+            border: 3px solid #00FF3C;
+            box-shadow: 0 0 30px rgba(0, 255, 60, 0.5);
+            padding: 30px;
+            max-width: 400px;
+            font-family: 'Press Start 2P', monospace;
+            text-align: center;
+            animation: modalGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes modalGlow {
+            from {
+                box-shadow: 0 0 30px rgba(0, 255, 60, 0.5);
+            }
+            to {
+                box-shadow: 0 0 50px rgba(0, 255, 60, 0.8);
+            }
+        }
+
+        .modal-content h2 {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            text-shadow: 0 0 10px #00FF3C;
+        }
+
+        .modal-content p {
+            font-size: 0.7rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #00FF3C;
+        }
+
+        .modal-content .prompt {
+            color: #00FF3C;
+            margin-right: 5px;
+        }
+
+        .modal-button {
+            background: transparent;
+            border: 2px solid #00FF3C;
+            color: #00FF3C;
+            padding: 15px 25px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px #00FF3C;
+            box-shadow: 0 0 10px rgba(0, 255, 60, 0.3);
+        }
+
+        .modal-button:hover {
+            background: #00FF3C;
+            color: #0C120C;
+            box-shadow: 0 0 20px #00FF3C, 0 0 40px #00FF3C;
+            text-shadow: none;
+            transform: scale(1.05);
+        }
+
+        .modal-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Scanlines effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, #0C120C 0%, transparent 100%);
+        }
+
+        .header a {
+            color: #00FF3C;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-shadow: 0 0 10px #00FF3C;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header a:hover {
+            text-shadow: 0 0 20px #00FF3C;
+        }
+
+        /* Main console container */
+        .console-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 40px 40px;
+            min-height: 100vh;
+        }
+
+        /* Terminal title */
+        .terminal-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 2rem;
+            color: #00FF3C;
+            margin-bottom: 2rem;
+            text-shadow:
+                0 0 10px #00FF3CFF,
+                0 0 20px #00FF3CCC,
+                0 0 30px #00FF3C99;
+        }
+
+        /* Terminal output */
+        .terminal-output {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #00FF3C;
+            text-shadow: 0 0 4px #00FF3C;
+        }
+
+        .terminal-output p {
+            margin-bottom: 0.3rem;
+        }
+
+        .terminal-output .command-link {
+            color: #00FF3C;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .terminal-output .command-link:hover {
+            text-shadow: 0 0 15px #00FF3C;
+            color: #50FF70;
+        }
+
+        .terminal-output .external-link {
+            color: #00CCFF;
+        }
+
+        .terminal-output .external-link:hover {
+            text-shadow: 0 0 15px #00CCFF;
+        }
+
+        /* Blinking cursor */
+        .blink-cursor {
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            to { visibility: hidden; }
+        }
+
+        /* Sections */
+        .section {
+            padding: 60px 0;
+            border-top: 1px solid #00FF3C30;
+        }
+
+        .section-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1rem;
+            color: #00FF3C;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px #00FF3C;
+        }
+
+        .section-content {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #00FF3CCC;
+        }
+
+        .section-terminal {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #00FF3C60;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Accordion - Experience & Projects */
+        .accordion-item {
+            border: 1px solid #00FF3C30;
+            margin-bottom: 0.5rem;
+            background: #0C120C;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .accordion-header:hover {
+            background: #00FF3C10;
+            border-left-color: #00FF3C;
+        }
+
+        .accordion-header.active {
+            background: #00FF3C15;
+            border-left-color: #00FF3C;
+        }
+
+        .accordion-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: #00FF3C;
+        }
+
+        .accordion-icon {
+            font-family: 'Courier New', monospace;
+            color: #00FF3C60;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(90deg);
+            color: #00FF3C;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #0C120C;
+        }
+
+        .accordion-content.open {
+            max-height: 500px;
+        }
+
+        .accordion-body {
+            padding: 1rem 1.2rem 1.5rem;
+            border-top: 1px solid #00FF3C20;
+        }
+
+        .accordion-meta {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #00FF3C80;
+            margin-bottom: 0.8rem;
+        }
+
+        .accordion-text {
+            font-size: 0.9rem;
+            color: #00FF3CAA;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid #00FF3C40;
+            color: #00FF3C;
+            background: #00FF3C10;
+        }
+
+        /* Contact links */
+        .contact-item {
+            margin-bottom: 0.8rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .contact-link {
+            color: #00CCFF;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            text-shadow: 0 0 10px #00CCFF;
+        }
+
+        .contact-link.whatsapp {
+            color: #25D366;
+        }
+
+        .contact-link.whatsapp:hover {
+            text-shadow: 0 0 10px #25D366;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid #00FF3C30;
+            font-size: 0.75rem;
+            color: #00FF3C50;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 10px 20px;
+            border: 1px solid #00FF3C40;
+            color: #00FF3C;
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover, .skill-tag:hover {
+            border-color: #00FF3C;
+            box-shadow: 0 0 20px #00FF3C40;
+        }
+
+        /* oscilloscope */
+ 
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 300px;
+            /* Un fondo negro sólido en el canvas hace que la línea resalte más */
+            background: #000000; 
+            border-top: 1px solid #444;
+            border-bottom: 1px solid #444;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .console-container {
+                padding: 80px 20px 20px;
+            }
+            .terminal-title {
+                font-size: 1.4rem;
+            }
+            .header {
+                padding: 15px 20px;
+                font-size: 0.8rem;
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+    <!-- Mobile Welcome Modal -->
+    <div id="mobile-modal">
+        <div class="modal-content">
+            <h2><span class="prompt">&gt;</span> MOBILE DETECTED</h2>
+            <p>
+                <span class="prompt">&gt;</span> This is a simplified experience.<br><br>
+                <span class="prompt">&gt;</span> For the full interactive experience with 3D animations, visit on a larger screen.
+            </p>
+            <button class="modal-button" onclick="dismissModal()">UNDERSTOOD</button>
+        </div>
+    </div>
+
+    <!-- Oscilloscope Background Canvas -->
+    <canvas id="oscilloscope"></canvas>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" id="back-link">&gt; back</a>
+        <a id="music-toggle" onclick="toggleMusic()">&gt; play_music [OFF]</a>
+    </header>
+
+    <!-- Main Console -->
+    <main class="console-container">
+        <!-- Terminal Title -->
+        <h1 class="terminal-title">CAINURIEL</h1>
+
+        <!-- Terminal Output -->
+        <div id="terminal-output" class="terminal-output display"></div>><span class="blink-cursor">_</span>
+
+        <section id="about" class="section">
+            <h2 class="section-title">&gt; ABOUT ME</h2>
+            <div class="section-terminal">
+                &gt; actitude: I love the feeling of a job well done.<br>
+               
+            </div>
+            <div class="section-content">
+                <p>Since 2019, dedicated exclusively to blockchain technology. Web3 developer focused on DeFi, smart contracts, and decentralized applications.</p>
+                <br>
+                 <p>Last year, creation the infrastructure of Spain Blockchain Servies infrastructure, ISBE.</p>
+                <br>
+                <p><strong>Core skills:</strong> Solidity, Hardhat, TypeScript, React, Node.js, Web3.js, Ethers.js, Hyperledger Besu</p>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="section">
+            <h2 class="section-title">&gt; EXPERIENCE</h2>
+            <div class="section-terminal">
+                &gt; Work at: S&M<br>
+                 &gt; status: Happy
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Senior Web3 Fullstack Developer in S&M</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="accordion-meta">&gt; period: 2025 - Present | location: Remote</div>
+                        <p class="accordion-text">Full-stack development and blockchain engineering for ISBE (Spain Blockchain Services Infrastructure) of Alastria group</p>
+                        <div class="skills-list">
+                            <span class="skill-tag back-link:hover ">Solidity</span>
+                            <span class="skill-tag back-link:hover ">Sveltekit</span>
+                            <span class="skill-tag back-link:hover ">TypeScript</span>
+                            <span class="skill-tag back-link:hover ">Hardhat</span>
+                            <span class="skill-tag back-link:hover ">Besu</span>
+                            <span class="skill-tag back-link:hover ">Docker</span>
+                            <span class="skill-tag back-link:hover ">API created</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Mobile Wallet Blockchain Web3 Developer in POLFEX</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="accordion-meta">&gt; period: 2021 - 2024 | location: Remote</div>
+                        <p class="accordion-text">Created libraries for Tron blockchain Tron that didn't exist at the time. Building dApps for marketplace NFTs and tokens</p>
+                        <div class="skills-list">
+                            <span class="skill-tag back-link:hover ">React Next.js</span>
+                            <span class="skill-tag back-link:hover ">Tron</span>
+                            <span class="skill-tag back-link:hover ">TypeScript</span>
+                            <span class="skill-tag back-link:hover ">Flutter</span>
+                            <span class="skill-tag back-link:hover ">Android</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Play-to-Earn Game Creator in Blockair</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="accordion-meta">&gt; period: 2021 - present | location: Remote </div>
+                        <p class="accordion-text">Design and development 100% blockchain game. Tokenomics design, NFT integration, and more than 100 upgredables smart contracts for gaming mechanics.</p>
+                        <div class="skills-list">
+                            <span class="skill-tag back-link:hover ">Game Design</span>
+                            <span class="skill-tag back-link:hover ">Tokenomics</span>
+                            <span class="skill-tag back-link:hover ">NFTs</span>
+                            <span class="skill-tag back-link:hover ">Solidity</span>
+                            <span class="skill-tag back-link:hover ">Sveltekit</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Blockchain Developer in several projects - already disappeared</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="accordion-meta">&gt; period: 2019 - present | location: Remote</div>
+                        <p class="accordion-text">Various projects of all kinds, NFT sales, play-to-earn games, auto-generated NFTs, artistic NFTs, soulbounds, in which he developed the contracts and often their dApps.</p>
+                        <div class="skills-list">
+                            <span class="skill-tag back-link:hover ">Solidity</span>
+                            <span class="skill-tag back-link:hover ">hardhat</span>
+                            <span class="skill-tag back-link:hover ">several javascript Frameworks</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+            <h2 class="section-title">&gt; PROJECTS</h2>
+            <div class="section-terminal">
+                &gt; side_projects: Because learning is constant and is only acquired through practice.<br>
+
+            </div>
+
+               <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Capicripto | Cryptography curves (2025)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">A nice way to learn about cryptography curves</p>
+                        <a href="https://github.com/Cainuriel/capicrypto" target="_blank" class="contact-link">capicripto</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Token Presale & NFT Market | Polfex (2024)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Preventa de Token con whitelist con contratos Vesting. Mercado de NFTs</p>
+                        <a href="https://dapp.polfex.io/" target="_blank" class="contact-link">dapp.polfex.io</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Deterministic Key Derivation | Flutter (2024)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Derivación Determinista Jerárquica de claves privadas en Flutter</p>
+                        <a href="https://github.com/Cainuriel/flutter_determinist_derivation_private_key" target="_blank" class="contact-link">github.com/Cainuriel/flutter_determinist_derivation_private_key</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; DAO Marketplace (2023)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Marketplace con Token DAO de reparto de beneficios</p>
+                        <a href="https://market-dao.vercel.app/" target="_blank" class="contact-link">market-dao.vercel.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Betting Game | Ripple Network (2023)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Juego de apuestas en la red de RIPPLE</p>
+                        <a href="https://juego-del-boton.vercel.app/" target="_blank" class="contact-link">juego-del-boton.vercel.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Web 2.5 | Account Abstraction (2023)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Ejemplo WEB2.5 Cuentas abstractas</p>
+                        <a href="https://garcia-web25.vercel.app/" target="_blank" class="contact-link">garcia-web25.vercel.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Play to Earn | Theta Network (2023)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Play to Earn Game en la red Theta testnet</p>
+                        <a href="https://bunny.arcadefantasy.games/" target="_blank" class="contact-link">bunny.arcadefantasy.games</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; NFT Marketplace (2023)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Marketplace de NFTs</p>
+                        <a href="https://malandriner-marketplace.netlify.app/" target="_blank" class="contact-link">malandriner-marketplace.netlify.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Blockchain Notary (2022)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Registro Notarial Blockchain</p>
+                        <a href="https://daapnotario.vercel.app/" target="_blank" class="contact-link">daapnotario.vercel.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; NFT Minting dApp | BSC (2022)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">dApp de compra de NFTs en BSC</p>
+                        <a href="https://genesis.topstars.app/" target="_blank" class="contact-link">genesis.topstars.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Resort NFTs (2022)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">NFTs de uso para acceso a un Resort Caribeño</p>
+                        <a href="https://bocasdao.finance/" target="_blank" class="contact-link">bocasdao.finance</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Merkle Tree | Whitelist Tutorial (2022)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Uso del árbol de merkle en solidity - White Lists</p>
+                        <a href="https://tutorial-arboldemerkle-solidity.netlify.app/" target="_blank" class="contact-link">tutorial-arboldemerkle-solidity.netlify.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Token Presale dApp (2021)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">dApp de preventa de tokens para fin divulgativo</p>
+                        <a href="https://pandoratoken.netlify.app/" target="_blank" class="contact-link">pandoratoken.netlify.app</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Payment Channels | Ethereum (2021)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Canales de pago en redes Ethereum</p>
+                        <a href="https://canaldepagoconsolidity.netlify.app/" target="_blank" class="contact-link">canaldepagoconsolidity.netlify.app</a>
+                    </div>
+                </div>
+            </div>
+
+              <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span class="accordion-title">&gt; Defi Game | Play to Earn | BlockAir (2021)</span>
+                    <span class="accordion-icon">&gt;</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p class="accordion-text">Play to earn inspirado en la aviación comercial</p>
+                        <a href="https://www.blockair.io/" target="_blank" class="contact-link">blockair.io</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <h2 class="section-title">&gt; CONTACT</h2>
+            <div class="section-terminal">
+                &gt; loading: cainuriel.contact<br>
+                &gt; channels: ready
+            </div>
+
+            <div class="contact-item">&gt; email: <a href="mailto:cainuriel@gmail.com" class="contact-link">cainuriel@gmail.com</a></div>
+            <div class="contact-item">&gt; phone: <a href="tel:+34622646626" class="contact-link">+34 622 646 626</a></div>
+            <div class="contact-item">&gt; whatsapp: <a href="https://wa.me/34622646626" target="_blank" class="contact-link whatsapp">wa.me/34622646626</a></div>
+            <div class="contact-item">&gt; github: <a href="https://github.com/cainuriel" target="_blank" class="contact-link">github.com/cainuriel</a></div>
+            <div class="contact-item">&gt; linkedin: <a href="https://linkedin.com/in/cainuriel" target="_blank" class="contact-link">linkedin.com/in/cainuriel</a></div>
+            <div class="contact-item">&gt; location: Palma de Mallorca, Spain</div>
+        </section>
+
+        <!-- github -->
+        <a href="https://github.com/cainuriel" target="_blank" class="back-link">&gt; my github</a>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &gt; © <span id="footer-year">2025</span> Cainuriel - Fernando Lopez | Web3 &amp; Blockchain Engineer &amp;  <q>music created with SUNO AI Music</q>
+    </footer>
+    <script>
+        // Update footer year
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Audio -->
+    <script src="audio-patch.js"></script>
+
+    <!-- Scripts -->
+    <script>
+        // Music Toggle
+        let musicPlaying = false;
+        let audioContext, analyser, dataArray, source, bufferLength;
+        let isAudioInitialized = false;
+
+        function toggleMusic() {
+            const btn = document.getElementById('music-toggle');
+            const canvas = document.getElementById('oscilloscope');
+
+            if (!window.UI_AUDIO || !window.UI_AUDIO.hariBgm) {
+                btn.textContent = '> loading...';
+                setTimeout(toggleMusic, 500);
+                return;
+            }
+
+            const bgm = window.UI_AUDIO.hariBgm;
+
+            if (musicPlaying) {
+                bgm.pause();
+                musicPlaying = false;
+                btn.textContent = '> play_music [OFF]';
+                canvas.classList.remove('active');
+            } else {
+                // Initialize audio context on first play
+                if (!isAudioInitialized) {
+                    initOscilloscope(bgm);
+                    isAudioInitialized = true;
+                }
+
+                bgm.loop = true;
+                bgm.volume = 0.4;
+                bgm.play().then(() => {
+                    musicPlaying = true;
+                    btn.textContent = '> play_music [ON]';
+                    canvas.classList.add('active');
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                });
+            }
+        }
+
+        // Initialize oscilloscope
+        function initOscilloscope(audioElement) {
+            const canvas = document.getElementById('oscilloscope');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            try {
+                // Create audio context
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 2048;
+
+                // Check if audio element is already connected to avoid error
+                if (!audioElement._oscilloscopeConnected) {
+                    // Connect audio
+                    source = audioContext.createMediaElementSource(audioElement);
+                    source.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    audioElement._oscilloscopeConnected = true;
+                }
+
+                bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+
+                // Start animation loop
+                animateOscilloscope(ctx, canvas);
+
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                });
+            } catch(err) {
+                console.log('[OSCILLOSCOPE] Init error:', err.message);
+            }
+        }
+
+        // Animate oscilloscope
+        function animateOscilloscope(ctx, canvas) {
+            requestAnimationFrame(() => animateOscilloscope(ctx, canvas));
+
+            if (!musicPlaying) return;
+
+            analyser.getByteTimeDomainData(dataArray);
+
+            // Clear canvas
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw waveform
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#00FF3C';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#00FF3C';
+            ctx.beginPath();
+
+            const sliceWidth = canvas.width / bufferLength;
+            let x = 0;
+
+            for(let i = 0; i < bufferLength; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * canvas.height / 2;
+
+                if(i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+        }
+
+        // Accordion Toggle
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isOpen = content.classList.contains('open');
+
+            // Close all others
+            document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
+            document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+
+            // Toggle current
+            if (!isOpen) {
+                content.classList.add('open');
+                header.classList.add('active');
+            }
+        }
+
+        // Typing Effect
+        const lines = [
+            { text: '> init cainuriel.portfolio', speed: 'fast' },
+            { text: '> loading profile...', speed: 'fast' },
+            { text: '> OK', speed: 'fast', pause: 400 }
+        ];
+
+        const speeds = { fast: 12, normal: 25, instant: 0 };
+        const terminal = document.getElementById('terminal-output');
+        let lineIndex = 0, charIndex = 0, currentElement = null;
+
+        function typeChar() {
+            if (lineIndex >= lines.length) return;
+
+            const line = lines[lineIndex];
+
+            if (charIndex === 0) {
+                currentElement = document.createElement('p');
+                if (line.link) {
+                    const a = document.createElement('a');
+                    a.href = line.link;
+                    a.className = 'command-link' + (line.external ? ' external-link' : '');
+                    if (line.external) a.target = '_blank';
+                    if (line.download) a.download = '';
+                    currentElement.appendChild(a);
+                }
+                terminal.appendChild(currentElement);
+            }
+
+            const text = line.text;
+            const speed = speeds[line.speed] || 25;
+
+            if (speed === 0) {
+                if (line.cursor) {
+                    currentElement.innerHTML = '> <span class="blink-cursor">_</span>';
+                } else if (line.link) {
+                    currentElement.querySelector('a').textContent = text;
+                } else {
+                    currentElement.textContent = text || '\u00A0';
+                }
+                lineIndex++;
+                charIndex = 0;
+                setTimeout(typeChar, line.pause || 80);
+                return;
+            }
+
+            if (charIndex < text.length) {
+                if (line.link) {
+                    currentElement.querySelector('a').textContent = text.substring(0, charIndex + 1);
+                } else {
+                    currentElement.textContent = text.substring(0, charIndex + 1);
+                }
+                charIndex++;
+                setTimeout(typeChar, speed);
+            } else {
+                lineIndex++;
+                charIndex = 0;
+                setTimeout(typeChar, line.pause || 80);
+            }
+        }
+
+        // Start typing
+        window.addEventListener('load', () => setTimeout(typeChar, 300));
+
+        // Mobile Modal Control
+        function dismissModal() {
+            const modal = document.getElementById('mobile-modal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        // Check if user came from mobile redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mobile') === 'true') {
+            // Hide back link for mobile users
+            const backLink = document.getElementById('back-link');
+            if (backLink) {
+                backLink.style.display = 'none';
+            }
+
+            window.addEventListener('load', () => {
+                const modal = document.getElementById('mobile-modal');
+                if (modal) {
+                    // Small delay for effect
+                    setTimeout(() => modal.classList.add('show'), 500);
+                }
+            });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const key = e.key;
+            if (key === '1') document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+            if (key === '2') document.getElementById('experience').scrollIntoView({ behavior: 'smooth' });
+            if (key === '3') document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            if (key === '4') document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            if (key === '5') window.open('/assets/resume/CV.pdf', '_blank');
+        });
+    </script>
+</body>
+</html>
