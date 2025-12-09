@@ -15445,7 +15445,8 @@
                     e = window.ASSETS["".concat(t, "x")];
                   ((e.width = this.bounds.width),
                     (e.height = this.bounds.height),
-                    (this.imageTexture.image = e));
+                    (this.imageTexture.image = e),
+                    (this.imageTexture.needsUpdate = !0));
                 },
               },
               {
@@ -20321,7 +20322,7 @@
                   geometry: this.geometry,
                   bounds: this.bounds,
                   scale: this.scale,
-                  count: 4,
+                  count: this.elements.projects.length,
                 };
                 this.elements.projects.forEach(function (i, n) {
                   var r = new sa(
