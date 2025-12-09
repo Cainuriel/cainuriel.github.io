@@ -6308,7 +6308,7 @@ input[type=number] {
 }
 
 .a-link {
-    font-size: calc(.3rem + .26vw);
+    font-size: clamp(0.8rem, 0.7rem + 0.4vw, 0.95rem);
     color: #00ff3c;
     text-decoration: none
 }
@@ -6350,7 +6350,7 @@ input[type=number] {
     color: #00ff3c;
     padding: 12px 24px;
     transition: .35s ease-in;
-    font-size: calc(.3rem + .26vw);
+    font-size: clamp(0.8rem, 0.7rem + 0.4vw, 0.95rem);
     box-shadow: 0 0 4px #00FF3C00
 }
 
@@ -6469,7 +6469,7 @@ input[type=number] {
 }
 
 .a-preloader-text {
-    font-size: calc(.3rem + .46vw)
+    font-size: clamp(0.85rem, 0.75rem + 0.45vw, 1rem)
 }
 
 .a-header-wrapper {
@@ -6589,11 +6589,11 @@ input[type=number] {
 }
 
 .a-clock-wrap .a-clock-text {
-    font-size: calc(.25rem + .24vw)
+    font-size: clamp(0.7rem, 0.6rem + 0.3vw, 0.85rem)
 }
 
 .a-scroll-down-btn {
-    font-size: calc(.25rem + .24vw)
+    font-size: clamp(0.7rem, 0.6rem + 0.3vw, 0.85rem)
 }
 
 .a-break-word-overflow {
@@ -6673,7 +6673,7 @@ input[type=number] {
 }
 
 .a-hero-tags {
-    font-size: calc(.4rem + .5vw)
+    font-size: clamp(0.8rem, 0.7rem + 0.5vw, 1rem)
 }
 
 .a-desc-regular {
@@ -6710,7 +6710,8 @@ input[type=number] {
 }
 
 .a-experience-desc {
-    font-size: calc(.3rem + .24vw)
+    font-size: clamp(0.7rem, 0.6rem + 0.35vw, 0.85rem);
+    line-height: 1.4
 }
 
 .a-contact-content-container {
@@ -6719,11 +6720,14 @@ input[type=number] {
 
 .a-experience-accordion-wrapper {
     padding-left: 16px;
-    width: 100%
+    width: 100%;
+    max-height: 70vh;
+    overflow-y: auto
 }
 
 .a-experience-sub-title {
-    font-size: calc(.3rem + .26vw)
+    font-size: clamp(0.75rem, 0.65rem + 0.4vw, 0.95rem);
+    line-height: 1.3
 }
 
 .a-projects-container {
@@ -6821,19 +6825,20 @@ input[type=number] {
 }
 
 .a-projects-content-container .a-project-id {
-    font-size: calc(.3rem + .26vw)
+    font-size: clamp(0.75rem, 0.65rem + 0.4vw, 0.9rem)
 }
 
 .a-projects-content-container .a-project-title {
-    font-size: calc(.5rem + .625vw)
+    font-size: clamp(1rem, 0.85rem + 0.6vw, 1.25rem)
 }
 
 .a-projects-content-container .a-project-tools {
-    font-size: calc(.25rem + .24vw)
+    font-size: clamp(0.7rem, 0.6rem + 0.35vw, 0.85rem)
 }
 
 .a-projects-content-container .a-project-description {
-    font-size: calc(.3rem + .46vw)
+    font-size: clamp(0.85rem, 0.75rem + 0.45vw, 1rem);
+    line-height: 1.5
 }
 
 .a-scroll-indicator-wrapper {
@@ -7153,7 +7158,33 @@ input[type=number] {
     }
 
     .a-experience-content-container {
-        width: 70vw
+        width: 80vw
+    }
+
+    .a-experience-accordion-wrapper {
+        padding-left: 12px
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .a-experience-content-container {
+        width: 85vw
+    }
+
+    .a-about-content-container {
+        width: 80vw
+    }
+
+    .a-contact-content-container {
+        width: 80vw
+    }
+
+    .a-projects-content-container {
+        width: calc(95vw - 2rem)
+    }
+
+    .a-frame-content-padding {
+        padding: 24px
     }
 }
 
@@ -7439,8 +7470,8 @@ input[type=number] {
 .a-about-terminal-text {
     font-family: "Press Start 2P";
     color: #00FF3C;
-    font-size: 0.75rem;
-    line-height: 1.6;
+    font-size: clamp(0.7rem, 0.6rem + 0.3vw, 0.85rem);
+    line-height: 1.8;
     text-shadow: 0 0 4px #00FF3CFF;
 }
 
@@ -7505,8 +7536,8 @@ input[type=number] {
 .a-contact-terminal-text {
     font-family: "Press Start 2P";
     color: #00FF3C;
-    font-size: 0.75rem;
-    line-height: 1.6;
+    font-size: clamp(0.7rem, 0.6rem + 0.3vw, 0.85rem);
+    line-height: 1.8;
     text-shadow: 0 0 4px #00FF3CFF;
 }
 
@@ -7799,7 +7830,7 @@ input[type=number] {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1000;
+    z-index: -1
 }
 
 /* === INNER WHITE RING === */
