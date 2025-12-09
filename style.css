@@ -6677,9 +6677,10 @@ input[type=number] {
 }
 
 .a-desc-regular {
-    font-size: 1rem;
+    font-size: clamp(0.75rem, 0.65rem + 0.35vw, 0.9rem);
     color: #00FF3C;
     font-family: 'Orbitron', sans-serif;
+    line-height: 1.5;
 }
 
 .a-hero-title-dummy {
@@ -6764,7 +6765,7 @@ input[type=number] {
 }
 
 .a-footer-text {
-    font-size: calc(1rem + 1.25vw)
+    font-size: clamp(1.25rem, 1rem + 1vw, 2rem)
 }
 
 .a-popup-backdrop {
@@ -7426,8 +7427,8 @@ input[type=number] {
 .a-hero-terminal {
     font-family: "Press Start 2P";
     color: #00FF3C;
-    font-size: 0.875rem;
-    line-height: 1.6;
+    font-size: clamp(0.6rem, 0.5rem + 0.25vw, 0.75rem);
+    line-height: 1.8;
     text-shadow: 0 0 4px #00FF3CFF;
 }
 
@@ -7444,7 +7445,7 @@ input[type=number] {
     font-family: "Press Start 2P";
     color: #00FF3C;
     text-decoration: none;
-    font-size: 0.75rem;
+    font-size: clamp(0.55rem, 0.45rem + 0.25vw, 0.7rem);
     transition: all 0.3s ease;
     position: relative;
 }
@@ -7463,14 +7464,14 @@ input[type=number] {
 .a-about-content-text {
     font-family: "Orbitron";
     color: #00FF3C;
-    line-height: 1.8;
-    font-size: 1rem;
+    line-height: 1.6;
+    font-size: clamp(0.8rem, 0.7rem + 0.4vw, 0.95rem);
 }
 
 .a-about-terminal-text {
     font-family: "Press Start 2P";
     color: #00FF3C;
-    font-size: clamp(0.7rem, 0.6rem + 0.3vw, 0.85rem);
+    font-size: clamp(0.55rem, 0.45rem + 0.25vw, 0.7rem);
     line-height: 1.8;
     text-shadow: 0 0 4px #00FF3CFF;
 }
@@ -7490,8 +7491,8 @@ input[type=number] {
 .a-experience-terminal-text {
     font-family: "Press Start 2P";
     color: #00FF3C;
-    font-size: 0.75rem;
-    line-height: 1.6;
+    font-size: clamp(0.55rem, 0.45rem + 0.25vw, 0.7rem);
+    line-height: 1.8;
     text-shadow: 0 0 4px #00FF3CFF;
 }
 
@@ -7536,7 +7537,7 @@ input[type=number] {
 .a-contact-terminal-text {
     font-family: "Press Start 2P";
     color: #00FF3C;
-    font-size: clamp(0.7rem, 0.6rem + 0.3vw, 0.85rem);
+    font-size: clamp(0.55rem, 0.45rem + 0.25vw, 0.7rem);
     line-height: 1.8;
     text-shadow: 0 0 4px #00FF3CFF;
 }
@@ -7549,9 +7550,9 @@ input[type=number] {
 .a-contact-description {
     font-family: "Orbitron";
     color: #00FF3C;
-    line-height: 1.8;
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-size: clamp(0.8rem, 0.7rem + 0.4vw, 0.95rem);
+    margin-bottom: 1.5rem;
 }
 
 .a-contact-link {
@@ -7664,13 +7665,15 @@ input[type=number] {
 .a-footer-content-text {
     font-family: "Orbitron";
     color: #00FF3C;
-    font-size: 0.875rem;
+    font-size: clamp(0.75rem, 0.65rem + 0.35vw, 0.9rem);
+    line-height: 1.5;
 }
 
 .a-footer-terminal-text {
     font-family: "Press Start 2P";
     color: #00FF3C;
-    font-size: 0.625rem;
+    font-size: clamp(0.5rem, 0.4rem + 0.2vw, 0.65rem);
+    line-height: 1.8;
     text-shadow: 0 0 4px #00FF3CFF;
 }
 
