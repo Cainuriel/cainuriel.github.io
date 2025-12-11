@@ -6574,7 +6574,14 @@ input[type=number] {
     height: 24px;
     bottom: 16px;
     left: 0;
-    z-index: 22
+    z-index: 22;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important
+}
+
+.a-scroll-down-btn-wrap .a-scroll-down-btn {
+    pointer-events: auto !important
 }
 
 .a-scroll-down-btn-wrap .a-scroll-down-btn::before {

@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(copy \"c:\\Users\\Fernando\\Documents\\projectos-web\\cainuriel.github.io\\assets\\icons\\favicon.ico\" \"c:\\Users\\Fernando\\Documents\\projectos-web\\cainuriel.github.io\\favicon.ico\")"
+    ]
+  }
+}
