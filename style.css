@@ -6714,6 +6714,7 @@ input[type=number] {
 }
 
 .a-experience-content-container {
+   
     width: 45vw
 }
 
@@ -7511,8 +7512,7 @@ input[type=number] {
 /* === ACCORDION === */
 .a-accordion-section {
     margin-bottom: 1rem;
-    border: 1px solid #00FF3C30;
-    background-color: #0C120C80;
+
 }
 
 .a-accordion-head {
