@@ -8505,8 +8505,8 @@
           },
         },
         cardMap: {
-          base: { path: "assets/images/cainuriel_hero_hq.webp", label: "base" },
-          texture: { path: "assets/images/texture.webp", label: "texture" },
+          base: { path: "assets/images/card_access_bg_delete.png", label: "base" },
+          texture: { path: "assets/images/card_access_bg_delete.png", label: "texture" },
         },
         audioLabel: {
           buttonMouseOver: "buttonMouseOver",
